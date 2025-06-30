@@ -189,22 +189,44 @@ class PdfProcessor {
     }
 
     public function RoundedRect($arraydata) {
-        if ($arraydata['mode'] == 'Transparent')
-            $style = '';
-        else
-            $style = 'FD';
-       
-        //
-        //        JasperPHP\Pdf::$pdfOutPut->SetLineStyle($arraydata['border']);
-        JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111', $style, $arraydata['border'], $arraydata['fillcolor']);
-    	//draw only border
-        if(isset($arraydata['border']['width']) && $arraydata['border']['width']>0){		
-            JasperPHP\Instructions::$objOutPut->SetLineStyle($arraydata['border']);
-            $arraydata['border']['color'] = '000';
-        //    dd($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111',$arraydata['border']);
-            JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111',$style,$arraydata['border'], $arraydata['fillcolor']);		
-            JasperPHP\Instructions::$objOutPut->SetLineStyle(array());
+
+	if (is_array($style)) {
+            $style = implode('', $style); // transforma ['F'] em 'F'
         }
+
+        if ($arraydata['mode'] == 'Transparent'){
+            $style = '';
+        }else{
+            $style = 'FD';
+	}
+
+        //        JasperPHP\Pdf::$pdfOutPut->SetLineStyle($arraydata['border']);
+        JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], 
+							$arraydata["y"] + JasperPHP\Instructions::$y_axis, 
+							$arraydata["width"], 
+							$arraydata["height"], 
+							$arraydata["radius"], 
+							'1111', 
+							$style, 
+							$arraydata['border'], 
+							$arraydata['fillcolor']);
+    	//draw only border
+	if(isset($arraydata['border']['width']) && $arraydata['border']['width']>0)
+	{		
+		JasperPHP\Instructions::$objOutPut->SetLineStyle($arraydata['border']);
+		$arraydata['border']['color'] = '000';
+		//dd($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111',$arraydata['border']);
+		JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], 
+								$arraydata["y"] + JasperPHP\Instructions::$y_axis, 
+								$arraydata["width"], 
+								$arraydata["height"], 
+								$arraydata["radius"], 
+								'1111', 
+								$style, 
+								$arraydata['border'],
+								$arraydata['fillcolor']);		
+		JasperPHP\Instructions::$objOutPut->SetLineStyle(array());
+	}
     }
 
     public function Ellipse($arraydata) {
